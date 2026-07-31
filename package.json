@@ -1,0 +1,18 @@
+{
+  "name": "report-assistance-platform",
+  "version": "1.0.0",
+  "description": "举报辅助平台 - 跨层级举报机制与证据固化辅助工具",
+  "main": "server/index.js",
+  "scripts": {
+    "start": "node server/index.js",
+    "dev": "node server/index.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "nodemailer": "^9.0.3",
+    "sql.js": "^1.9.0",
+    "ssh2": "^1.17.0"
+  }
+}

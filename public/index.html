@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<meta name="theme-color" content="#0d0d0d"><meta name="description" content="举报辅助平台">
+<title>教你举报</title>
+<link rel="icon" href="/logo.svg">
+<link rel="manifest" href="/manifest.json">
+<link rel="apple-touch-icon" href="/icons/icon-192.png">
+<style>
+:root {
+  --bg:#f5f5f7;--bg2:#fff;--bg3:#e8e8ed;--text:#1d1d1f;--text2:#86868b;--text3:#6e6e73;
+  --accent:#c0392b;--accent2:#e74c3c;--border:rgba(0,0,0,.08);--radius:14px;
+  --font:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","Microsoft YaHei",sans-serif;
+}
+[data-theme="dark"] {
+  --bg:#0d0d0d;--bg2:#1c1c1e;--bg3:#2c2c2e;
+  --text:#f5f5f7;--text2:#98989d;--text3:#8e8e93;
+  --accent2:#ff6b6b;--border:rgba(255,255,255,.08);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{font-size:16px}
+body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:100vh;line-height:1.55;-webkit-font-smoothing:antialiased;transition:background .3s,color .3s}
+
+.hd{position:sticky;top:0;z-index:100;background:rgba(13,13,13,.72);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:10px 20px;display:flex;align-items:center;justify-content:space-between}
+[data-theme] .hd{background:rgba(245,245,247,.72)}
+[data-theme="dark"] .hd{background:rgba(13,13,13,.72)}
+.hd-title{font-size:16px;font-weight:700;letter-spacing:-.01em}.hd-step{font-size:11px;color:var(--text3);font-weight:500}
+.hd-right{display:flex;align-items:center;gap:8px}
+.ibtn{padding:4px 10px;border-radius:12px;border:1px solid var(--accent);background:transparent;color:var(--accent);font-size:11px;font-weight:500;cursor:pointer;font-family:var(--font);white-space:nowrap;transition:all .2s;-webkit-tap-highlight-color:transparent}
+.ibtn:hover{background:var(--accent);color:#fff}
+.tgl{width:32px;height:32px;border-radius:50%;border:1px solid var(--border);background:var(--bg2);cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center;transition:all .2s;color:var(--text)}
+.tgl:active{transform:scale(.9)}
+.prog{height:3px;background:var(--bg3);position:sticky;top:53px;z-index:99;transition:background .3s}
+.prog .fill{height:100%;background:var(--accent);transition:width .4s cubic-bezier(.25,.1,.25,1)}
+
+.ctn{max-width:600px;margin:0 auto;padding:18px 14px 60px}
+
+.idx{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:14px}
+.idx-btn{padding:7px 12px;border-radius:18px;border:1px solid var(--border);background:transparent;color:var(--text2);font-size:12px;cursor:pointer;transition:all .2s;font-family:var(--font);font-weight:500}
+.idx-btn:hover{border-color:var(--accent);color:var(--accent)}
+.idx-btn.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;padding:12px 24px;border:none;border-radius:22px;font-size:14px;font-weight:600;cursor:pointer;transition:all .2s cubic-bezier(.25,.1,.25,1);font-family:var(--font);-webkit-tap-highlight-color:transparent}
+.btn:active{transform:scale(.97)}.btn:disabled{opacity:.4;cursor:not-allowed;transform:none}
+.btn-p{background:var(--accent);color:#fff;box-shadow:0 2px 8px rgba(192,57,43,.2)}
+.btn-p:hover:not(:disabled){background:var(--accent2)}
+.btn-s{background:var(--bg3);color:var(--text)}
+.btn-o{background:transparent;color:var(--accent);border:1.5px solid var(--accent)}
+.btn-ss{padding:7px 14px;font-size:12px;border-radius:16px}
+
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:20px 16px;margin-bottom:10px;transition:all .3s}
+.card h2{font-size:18px;font-weight:700;margin-bottom:12px;letter-spacing:-.01em;line-height:1.2}
+.card h3{font-size:14px;font-weight:600;margin-bottom:8px;color:var(--text)}
+.card p,.card li{font-size:13px;color:var(--text2);margin-bottom:4px;line-height:1.6}
+.card ul{padding-left:16px}.card li{margin-bottom:3px}
+.ttl{font-size:clamp(18px,4vw,24px);font-weight:700;margin-bottom:14px;letter-spacing:-.015em;line-height:1.15}
+
+input,select,textarea{width:100%;padding:11px 12px;background:var(--bg);border:1.5px solid var(--border);border-radius:10px;color:var(--text);font-size:14px;font-family:var(--font);transition:all .2s;-webkit-appearance:none}
+select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%2386868b' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:32px}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(192,57,43,.08)}
+textarea{min-height:80px;resize:vertical}
+.fg{margin-bottom:12px}.fg label{display:block;font-size:12px;font-weight:600;color:var(--text3);margin-bottom:4px;letter-spacing:.02em}
+.fr{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+
+.modal{position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,.5);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;padding:20px;animation:fade .2s ease}
+.modal-inner{background:var(--bg2);border:1px solid var(--border);border-radius:18px;padding:28px 22px;max-width:400px;width:100%;max-height:85vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.15);animation:mdlIn .3s cubic-bezier(.25,.1,.25,1)}
+.modal h2{font-size:20px;font-weight:700;text-align:center;margin-bottom:12px;letter-spacing:-.01em}
+.modal p{font-size:13px;color:var(--text2);margin-bottom:6px;line-height:1.6}
+.modal .btn{width:100%;margin-bottom:8px}
+
+.step{animation:stp .35s cubic-bezier(.25,.1,.25,1)}@keyframes stp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}@keyframes fade{from{opacity:0}to{opacity:1}}@keyframes mdlIn{from{opacity:0;transform:scale(.96)translateY(10px)}to{opacity:1;transform:scale(1)translateY(0)}}
+
+.alert{padding:10px 14px;border-radius:10px;margin-bottom:10px;font-size:12px;line-height:1.5}
+.al-red{background:rgba(192,57,43,.08);border:1px solid rgba(192,57,43,.2);color:var(--accent)}
+.al-yl{background:rgba(240,173,78,.1);border:1px solid rgba(240,173,78,.2);color:#f0ad4e}
+
+.tbs{display:flex;gap:3px;margin-bottom:14px;background:var(--bg3);border-radius:10px;padding:3px}
+.tb{flex:1;padding:8px 6px;text-align:center;border:none;background:transparent;color:var(--text2);font-size:12px;cursor:pointer;border-radius:8px;transition:all .2s;font-family:var(--font);font-weight:500;white-space:nowrap}
+.tb.on{background:var(--bg2);color:var(--text);font-weight:600;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+
+.cn{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1.5px solid var(--border);border-radius:10px;margin-bottom:6px;cursor:pointer;transition:all .2s;-webkit-tap-highlight-color:transparent}
+.cn:hover{border-color:var(--accent)}.cn.ck{border-color:var(--accent);background:rgba(192,57,43,.06)}
+.cx{width:20px;height:20px;border:2px solid var(--border);border-radius:5px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;transition:all .2s;color:transparent}
+.cn.ck .cx{background:var(--accent);border-color:var(--accent);color:#fff}
+.cl{flex:1;min-width:0}.cl b{display:block;font-size:13px;margin-bottom:1px}.cl span{font-size:11px;color:var(--text2)}
+
+.dv{text-align:center;padding:18px;border:1px solid var(--border);border-radius:var(--radius);margin-top:14px}
+.qr{width:140px;height:140px;margin:0 auto 6px;background:var(--bg3);border-radius:10px;display:flex;align-items:center;justify-content:center;color:var(--text3);font-size:12px}
+
+table{width:100%;font-size:12px;border-collapse:collapse}
+th{padding:7px 8px;background:var(--bg3);color:var(--text3);font-weight:600;text-align:left;font-size:11px;letter-spacing:.02em}
+td{padding:8px;border-bottom:1px solid var(--border);color:var(--text2);vertical-align:top}
+td.tb{color:var(--text);line-height:1.5}
+
+.about{border-left:3px solid var(--accent);padding-left:12px;margin-bottom:10px;font-size:13px}
+.about b{display:block;font-size:14px;margin-bottom:2px}
+
+.rel{position:relative}
+.cop{position:absolute;top:6px;right:6px;z-index:5;padding:4px 10px;font-size:11px;background:var(--bg3);border:1px solid var(--border);color:var(--text2);border-radius:12px;cursor:pointer;transition:all .2s}
+.cop:hover{border-color:var(--accent);color:var(--accent)}
+
+.spn{width:18px;height:18px;border:2.5px solid var(--bg3);border-top-color:var(--accent);border-radius:50%;animation:spn .7s linear infinite;display:inline-block}@keyframes spn{to{transform:rotate(360deg)}}
+
+.hid{display:none!important}
+footer{text-align:center;padding:24px 16px;color:var(--text3);font-size:11px;border-top:1px solid var(--border);margin-top:20px}
+::-webkit-scrollbar{width:3px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+
+@media(max-width:480px){.ctn{padding:12px 8px 50px}.card{padding:14px 12px;border-radius:12px}.fr{grid-template-columns:1fr}.btn{font-size:13px;padding:11px 18px}.hd{padding:8px 12px}.tbs{gap:2px}.tb{font-size:11px;padding:7px 4px}}
+@media(prefers-reduced-motion:reduce){.step{animation:none}.modal-inner{animation:none}.prog .fill{transition:none}.btn,.cn,.tb,.tgl{transition:none}.btn:active,.tb:active,.cop:active{transform:none}}
+</style></head><body>
+
+<div class="hd"><div><span class="hd-title">教你举报</span><span class="hd-step" id="si">开始</span></div><div class="hd-right"><button class="ibtn" onclick="showInstallGuide()" title="安装到桌面">安装应用</button><button class="tgl" id="tb" title="切换主题">&#9790;</button></div></div>
+<div class="prog"><div class="fill" id="pf" style="width:0%"></div></div>
+<div class="hid" id="idxw"><div class="ctn" style="padding-bottom:0"><div class="idx" id="ix"></div></div></div>
+<div class="ctn" id="app"></div>
+<footer><p>本工具仅供学习参考，举报请依法依规进行</p><p style="margin-top:2px">Hamster <a href="mailto:zviman777@gmail.com" style="color:var(--text3)">zviman777@gmail.com</a></p></footer>
+
+<script>
+// ===== 32省市渠道数据 =====
+const P = ['北京市','天津市','河北省','山西省','内蒙古自治区','辽宁省','吉林省','黑龙江省','上海市','江苏省','浙江省','安徽省','福建省','江西省','山东省','河南省','湖北省','湖南省','广东省','广西壮族自治区','海南省','重庆市','四川省','贵州省','云南省','西藏自治区','陕西省','甘肃省','青海省','宁夏回族自治区','新疆维吾尔自治区'];
+const EN=[{dept:'教育部统一监督举报平台',ph:'010-66092315 / 010-66093315',em:'12391@moe.edu.cn / jcjy@moe.edu.cn',web:'中国政务服务平台小程序(含投诉建议系统)'},{dept:'教育乱收费专项督办',ph:'010-66096145 / 010-66096146',em:'jybzlb@moe.edu.cn',web:'中国政务服务平台小程序'},{dept:'教材审查管理处',ph:'010-66096850 / 010-66097193',em:'纸质寄信至北京市西城区大木仓胡同35号',web:'中国政务服务平台小程序'},{dept:'中外合作办学监督',ph:'—',em:'12391@moe.edu.cn（纸质寄信访处）',web:'中国政务服务平台小程序'}];
+const EP={'北京市':{dept:'教育行政与规范办学热线',ph:'010-63088406 / 010-66074689',em:'bjgw@bjedu.gov.cn',web:'北京12345微信服务号/小程序'},'天津市':{dept:'教育行政及乱收费监督',ph:'022-83605045 / 022-83215060',em:'jwjgw@eyou.com',web:'天津12345微信小程序 / 津心办'},'河北省':{dept:'教育行政规范办学',ph:'0311-66005060 / 0311-66005813',em:'hbsjytjjz@sina.com',web:'河北12345微信小程序 / 冀时办'},'山西省':{dept:'中小学规范办学及阳光招生',ph:'0351-3046324 / 0351-3046890',em:'sxjyjc@163.com',web:'山西12345微信小程序'},'内蒙古自治区':{dept:'教育行政规范办学',ph:'0471-6203721 / 0471-2856057',em:'lyljyt@126.com',web:'内蒙古12345政务服务小程序'},'辽宁省':{dept:'规范办学行为管理办公室',ph:'024-86891848 / 024-86913750',em:'lnsjygfb@163.com',web:'辽宁12345微信小程序'},'吉林省':{dept:'教育行政规范办学',ph:'0431-88904030 / 0431-89968323',em:'li87075383@163.com',web:'吉林12345微信小程序'},'黑龙江省':{dept:'教育行政规范办学',ph:'0451-53623954 / 0451-82578287',em:'hljejc@sian.com',web:'黑龙江12345微信小程序'},'上海市':{dept:'市教委招生监督及义务教育',ph:'021-23116807 / 021-25654197',em:'annajia@126.com',web:'上海12345市民服务热线小程序'},'江苏省':{dept:'驻省教育厅纪检监察组',ph:'025-83335534 / 025-83335604',em:'sjyjgw@ec.js.edu.cn',web:'苏服办小程序'},'浙江省':{dept:'教育行政规范办学',ph:'0571-88008731 / 0571-88008823',em:'jyjgw0571@163.com',web:'浙江12345（民呼我为）小程序'},'安徽省':{dept:'教育行政规范办学',ph:'0551-2831847 / 0551-62816403',em:'wangbt@ahedu.gov.cn',web:'安徽12345 / 安徽纪检监察小程序'},'福建省':{dept:'驻省教育厅纪检监察组',ph:'0591-87853491 / 0591-87091296',em:'通过 fujian.12388.gov.cn 网络举报',web:'福建12345便民服务小程序'},'江西省':{dept:'教育行政规范办学',ph:'0791-6212184 / 0791-86765130',em:'jytjcs@jxedu.gov.cn',web:'江西12345政务服务小程序'},'山东省':{dept:'中小学阳光招生及规范办学',ph:'0531-81916589 / 0531-82924403',em:'jyjj@sdpec.edu.cn',web:'山东12345政务服务小程序'},'河南省':{dept:'教育厅规范办学信箱',ph:'0371-69691776 / 0371-69691775',em:'jijian@haedu.gov.cn',web:'河南12345政务服务小程序'},'湖北省':{dept:'教育行政规范办学',ph:'027-87328126 / 027-87328125',em:'jyhf@e21.edu.cn',web:'鄂汇办微信小程序(违规培训随手拍)'},'湖南省':{dept:'教育行政规范办学',ph:'0731-82204240 / 0731-82204148',em:'yypch@163.com',web:'湖南12345微信小程序'},'广东省':{dept:'驻省教育厅纪检监察组',ph:'020-37628956 / 020-37629410',em:'bailishi@gdhed.edu.cn',web:'粤省心政务服务小程序'},'广西壮族自治区':{dept:'教育行政规范办学',ph:'0771-5815266 / 0771-5815488',em:'jjz@gxedu.gov.cn',web:'广西12345政务服务小程序'},'海南省':{dept:'教育行政规范办学',ph:'0898-65376180 / 0898-65230370',em:'jygw@sina.com',web:'海南12345微信小程序'},'重庆市':{dept:'教育行政规范办学',ph:'023-63612257 / 023-67656197',em:'fyt6361@sina.com',web:'重庆12345微信小程序'},'四川省':{dept:'招生入学服务管理系统',ph:'028-86111182 / 028-86113474',em:'jigongwei@tom.com',web:'四川12345政务服务小程序'},'贵州省':{dept:'教育行政规范办学',ph:'0851-5283154 / 0851-85283262',em:'jytjcs@126.com',web:'贵州12345政务服务小程序'},'云南省':{dept:'教育行政规范办学',ph:'0871-5141284 / 0871-65102717',em:'ynjyjcs@163.com',web:'云南12345微信小程序'},'西藏自治区':{dept:'驻教育厅纪检监察组',ph:'0891-6323304 / 0891-6599817',em:'jyjgw2010@163.com',web:'西藏12345微信小程序'},'陕西省':{dept:'教育行政规范办学',ph:'029-85582594 / 029-85581788',em:'sxsjyjgwlt@126.com',web:'陕西12345微信小程序'},'甘肃省':{dept:'教育行政规范办学',ph:'0931-8821246 / 0931-8802172',em:'gsjynhf@sina.com',web:'甘肃12345微信小程序'},'青海省':{dept:'驻教育厅纪检监察组',ph:'0971-6312917 / 0971-6310023',em:'szfdds@163.com',web:'青海12345微信小程序'},'宁夏回族自治区':{dept:'教育行政及入学投诉平台',ph:'0951-6043632 / 0951-5559080',em:'nxjytjcs@126.com',web:'宁夏12345政务服务小程序'},'新疆维吾尔自治区':{dept:'教育行政规范办学',ph:'0991-7606199 / 0991-7606024',em:'xjjytjc@163.com',web:'新疆12345微信小程序'}};
+const GN=[{dept:'中央纪委国家监委 (12388) / 中央组织部 (12380)',ph:'010-12388 / 010-12380',em:'www.12388.gov.cn / www.12380.gov.cn',web:'中央纪委国家监委网站微信公众号'},{dept:'最高人民法院 (12368) / 最高人民检察院 (12309)',ph:'12368 / 12309',em:'yzxx@court.gov.cn / www.12309.gov.cn',web:'中国政务服务平台小程序'},{dept:'国家投诉受理办公室（国家信访局）',ph:'—',em:'通过国家信访局官网提交',web:'中国政务服务平台小程序'},{dept:'公安部违纪违法举报 (12389)',ph:'12389',em:'www.12389.gov.cn',web:'—'},{dept:'国家安全机关 (12339) / 扫黑除恶',ph:'12339 / 010-65254722',em:'www.12339.gov.cn',web:'—'},{dept:'国家金融监督管理总局纪检组',ph:'010-12388',em:'—',web:'中国政务服务平台小程序'},{dept:'人社部农民工工资拖欠',ph:'010-68304532',em:'—',web:'—'},{dept:'重大建设项目/安全生产(12350)/物价(12358)',ph:'010-68501111 / 12350 / 12358',em:'—',web:'—'}];
+const GP={'北京市':{p88:'010-12388 / beijing.12388.gov.cn',p80:'bj12380.gov.cn',p45:'北京市12345热线',web:'北京12345微信服务号'},'天津市':{p88:'022-12388 / tianjin.12388.gov.cn',p80:'tj12380.gov.cn',p45:'天津市12345政务服务平台',web:'天津12345微信小程序'},'河北省':{p88:'0311-12388 / hebei.12388.gov.cn',p80:'hbjbzx.gov.cn',p45:'河北省12345热线',web:'河北12345微信小程序 / 冀时办'},'山西省':{p88:'shanxi.12388.gov.cn',p80:'sx12380.gov.cn / 15035112380',p45:'山西省政府12345综合平台',web:'山西12345微信小程序'},'内蒙古自治区':{p88:'0471-12388 / neimeng.12388.gov.cn',p80:'12380.nmgdj.gov.cn',p45:'内蒙古12345政务服务便民热线',web:'内蒙古12345微信小程序'},'辽宁省':{p88:'024-12388 / liaoning.12388.gov.cn',p80:'ln12380.gov.cn',p45:'辽宁省12345综合服务平台',web:'辽宁12345微信小程序'},'吉林省':{p88:'0431-12388 / jilin.12388.gov.cn',p80:'jl12380.gov.cn',p45:'吉林省12345政务服务热线',web:'吉林12345微信小程序'},'黑龙江省':{p88:'heilongjiang.12388.gov.cn',p80:'hlj12380.gov.cn',p45:'黑龙江省12345政务服务平台',web:'黑龙江12345微信小程序'},'上海市':{p88:'021-12388 / shanghai.12388.gov.cn',p80:'shanghai12380.gov.cn',p45:'上海市12345政务服务热线',web:'上海12345市民服务热线小程序'},'江苏省':{p88:'025-12388 / jiangsu.12388.gov.cn',p80:'js12380.gov.cn',p45:'江苏省12345政务服务便民热线',web:'苏服办小程序'},'浙江省':{p88:'0571-12388 / zhejiang.12388.gov.cn',p80:'zj12380.gov.cn',p45:'浙江省统一民呼我为平台 / 12345',web:'浙江12345微信小程序'},'安徽省':{p88:'anhui.12388.gov.cn',p80:'ah12380.gov.cn',p45:'安徽省12345政务热线',web:'安徽纪检监察+12345小程序'},'福建省':{p88:'fujian.12388.gov.cn',p80:'fj12380.gov.cn',p45:'福建省12345政务服务平台',web:'福建12345便民服务微信小程序'},'江西省':{p88:'0791-12388 / jiangxi.12388.gov.cn',p80:'12380jiangxi',p45:'江西省12345政务热线',web:'江西12345微信小程序'},'山东省':{p88:'shandong.12388.gov.cn',p80:'sd12380.gov.cn',p45:'山东省12345政务服务便民热线',web:'山东12345微信小程序'},'河南省':{p88:'henan.12388.gov.cn',p80:'hn12380.gov.cn',p45:'河南省12345政务服务平台',web:'河南12345微信小程序'},'湖北省':{p88:'hubei.12388.gov.cn',p80:'hb12380.gov.cn',p45:'湖北省12345政务热线',web:'鄂汇办微信小程序'},'湖南省':{p88:'hunan.12388.gov.cn',p80:'hn12380.gov.cn',p45:'湖南省12345政务服务平台',web:'湖南12345微信小程序'},'广东省':{p88:'guangdong.12388.gov.cn',p80:'gd12380.cn',p45:'广东省政务服务12345平台',web:'粤省心便民热线小程序'},'广西壮族自治区':{p88:'guangxi.12388.gov.cn',p80:'gx12380.gov.cn',p45:'广西12345政务服务便民热线',web:'广西12345微信小程序'},'海南省':{p88:'hainan.12388.gov.cn',p80:'hn12380.gov.cn',p45:'海南省12345政务服务平台',web:'海南12345微信小程序'},'重庆市':{p88:'chongqing.12388.gov.cn',p80:'cq12380.gov.cn',p45:'重庆市12345政务服务热线',web:'重庆12345政务服务小程序'},'四川省':{p88:'sichuan.12388.gov.cn',p80:'sc12380.gov.cn',p45:'四川省12345政务服务平台',web:'四川12345微信小程序'},'贵州省':{p88:'guizhou.12388.gov.cn',p80:'gz12380.gov.cn',p45:'贵州省12345政务服务热线',web:'贵州12345微信小程序'},'云南省':{p88:'yunnan.12388.gov.cn',p80:'yn12380.gov.cn',p45:'云南省12345政务服务平台',web:'云南12345微信小程序'},'西藏自治区':{p88:'xizang.12388.gov.cn',p80:'xz12380.gov.cn',p45:'西藏12345政务服务便民热线',web:'西藏12345微信小程序'},'陕西省':{p88:'shaanxi.12388.gov.cn',p80:'sx12380.gov.cn',p45:'陕西省12345政务服务平台',web:'陕西12345微信小程序'},'甘肃省':{p88:'gansu.12388.gov.cn',p80:'gs12380.gov.cn',p45:'甘肃省12345政务服务便民热线',web:'甘肃12345微信小程序'},'青海省':{p88:'qinghai.12388.gov.cn',p80:'qh12380.gov.cn',p45:'青海省12345政务服务平台',web:'青海12345微信小程序'},'宁夏回族自治区':{p88:'ningxia.12388.gov.cn',p80:'nx12380.gov.cn',p45:'宁夏12345政务服务便民热线',web:'宁夏12345微信小程序'},'新疆维吾尔自治区':{p88:'0991-12388 / xinjiang.12388.gov.cn',p80:'xj12380.gov.cn',p45:'新疆12345政务热线 / 兵团12345',web:'新疆12345微信小程序'}};
+
+// 城市经纬度
+const CL={
+  '东城区':[116.418,39.928],'西城区':[116.366,39.912],'朝阳区':[116.601,39.945],'海淀区':[116.297,39.959],'丰台区':[116.287,39.858],'石景山区':[116.221,39.906],
+  '和平区':[117.215,39.118],'河东区':[117.225,39.122],'河西区':[117.218,39.098],'南开区':[117.151,39.130],'河北区':[117.196,39.148],'滨海新区':[117.654,39.034],
+  '石家庄市':[114.514,38.042],'唐山市':[118.18,39.63],'保定市':[115.484,38.873],'邯郸市':[114.539,36.625],'廊坊市':[116.683,39.537],'秦皇岛市':[119.586,39.942],
+  '太原市':[112.548,37.87],'大同市':[113.295,40.09],'运城市':[111.003,35.022],'临汾市':[111.518,36.083],'晋中市':[112.752,37.687],'长治市':[113.116,36.195],
+  '呼和浩特市':[111.749,40.841],'包头市':[109.84,40.657],'鄂尔多斯市':[109.781,39.608],'赤峰市':[118.888,42.257],'通辽市':[122.244,43.617],
+  '沈阳市':[123.429,41.796],'大连市':[121.618,38.914],'鞍山市':[122.994,41.108],'抚顺市':[123.957,41.88],'锦州市':[121.126,41.095],'丹东市':[124.354,40],
+  '长春市':[125.324,43.886],'吉林市':[126.549,43.837],'四平市':[124.35,43.166],'通化市':[125.939,41.728],'延边州':[129.508,42.891],
+  '哈尔滨市':[126.535,45.802],'齐齐哈尔市':[123.918,47.354],'大庆市':[125.103,46.589],'牡丹江市':[129.608,44.582],'佳木斯市':[130.318,46.799],
+  '黄浦区':[121.484,31.231],'徐汇区':[121.435,31.179],'长宁区':[121.42,31.22],'静安区':[121.448,31.227],'浦东新区':[121.544,31.221],'闵行区':[121.381,31.112],
+  '南京市':[118.796,32.059],'苏州市':[120.585,31.298],'无锡市':[120.301,31.574],'常州市':[119.974,31.811],'南通市':[120.894,31.979],'徐州市':[117.184,34.261],
+  '杭州市':[120.155,30.274],'宁波市':[121.622,29.868],'温州市':[120.672,28],'嘉兴市':[120.75,30.762],'绍兴市':[120.581,29.997],'金华市':[119.652,29.078],
+  '合肥市':[117.227,31.82],'芜湖市':[118.432,31.352],'蚌埠市':[117.389,32.915],'淮南市':[117.018,32.626],'阜阳市':[115.814,32.89],'安庆市':[117.063,30.543],
+  '福州市':[119.296,26.074],'厦门市':[118.089,24.479],'泉州市':[118.675,24.874],'漳州市':[117.647,24.513],'莆田市':[119.007,25.431],
+  '南昌市':[115.858,28.683],'赣州市':[114.933,25.831],'九江市':[115.992,29.712],'宜春市':[114.416,27.814],'上饶市':[117.943,28.454],
+  '济南市':[117,36.651],'青岛市':[120.382,36.067],'烟台市':[121.448,37.463],'潍坊市':[119.161,36.706],'临沂市':[118.356,35.104],'淄博市':[118.054,36.813],
+  '郑州市':[113.625,34.746],'洛阳市':[112.454,34.619],'开封市':[114.341,34.797],'新乡市':[113.926,35.303],'南阳市':[112.528,32.99],'信阳市':[114.091,32.147],
+  '武汉市':[114.305,30.593],'宜昌市':[111.286,30.691],'襄阳市':[112.122,32.009],'荆州市':[112.241,30.335],'黄冈市':[114.872,30.453],'十堰市':[110.798,32.629],
+  '长沙市':[112.938,28.228],'株洲市':[113.131,27.835],'湘潭市':[112.944,27.829],'衡阳市':[112.572,26.893],'岳阳市':[113.128,29.357],'常德市':[111.699,29.031],
+  '广州市':[113.264,23.129],'深圳市':[114.057,22.543],'东莞市':[113.751,23.02],'佛山市':[113.121,23.021],'珠海市':[113.576,22.271],'中山市':[113.382,22.515],
+  '南宁市':[108.366,22.817],'桂林市':[110.29,25.273],'柳州市':[109.428,24.326],'梧州市':[111.279,23.476],'北海市':[109.119,21.473],
+  '海口市':[110.331,20.031],'三亚市':[109.508,18.247],'儋州市':[109.576,19.521],'琼海市':[110.466,19.246],
+  '渝中区':[106.562,29.556],'江北区':[106.577,29.609],'南岸区':[106.643,29.518],'沙坪坝区':[106.456,29.541],'九龙坡区':[106.506,29.502],'渝北区':[106.63,29.718],
+  '成都市':[104.066,30.572],'绵阳市':[104.679,31.467],'德阳市':[104.397,31.127],'南充市':[106.11,30.837],'宜宾市':[104.63,28.751],'泸州市':[105.443,28.871],
+  '贵阳市':[106.63,26.647],'遵义市':[106.927,27.725],'六盘水市':[104.832,26.591],'黔南州':[107.517,26.258],
+  '昆明市':[102.832,24.88],'曲靖市':[103.796,25.49],'玉溪市':[102.546,24.351],'大理州':[100.225,25.591],'红河州':[103.375,23.364],
+  '拉萨市':[91.14,29.65],'日喀则市':[88.881,29.267],'昌都市':[97.178,31.146],
+  '西安市':[108.939,34.341],'咸阳市':[108.708,34.329],'宝鸡市':[107.237,34.361],'渭南市':[109.51,34.499],'汉中市':[107.023,33.066],'榆林市':[109.733,38.285],
+  '兰州市':[103.834,36.061],'天水市':[105.724,34.58],'酒泉市':[98.494,39.732],'嘉峪关市':[98.277,39.773],
+  '西宁市':[101.778,36.617],'海东市':[102.104,36.479],
+  '银川市':[106.23,38.486],'石嘴山市':[106.383,38.984],'吴忠市':[106.198,37.986],
+  '乌鲁木齐市':[87.617,43.825],'克拉玛依市':[84.889,45.596],'吐鲁番市':[89.184,42.947],'喀什地区':[75.989,39.467]
+};
+
+// 省份城市
+const PC={'北京市':['东城区','西城区','朝阳区','海淀区','丰台区','石景山区'],'天津市':['和平区','河东区','河西区','南开区','河北区','滨海新区'],'河北省':['石家庄市','唐山市','保定市','邯郸市','廊坊市','秦皇岛市'],'山西省':['太原市','大同市','运城市','临汾市','晋中市','长治市'],'内蒙古自治区':['呼和浩特市','包头市','鄂尔多斯市','赤峰市','通辽市'],'辽宁省':['沈阳市','大连市','鞍山市','抚顺市','锦州市','丹东市'],'吉林省':['长春市','吉林市','四平市','通化市','延边州'],'黑龙江省':['哈尔滨市','齐齐哈尔市','大庆市','牡丹江市','佳木斯市'],'上海市':['黄浦区','徐汇区','长宁区','静安区','浦东新区','闵行区'],'江苏省':['南京市','苏州市','无锡市','常州市','南通市','徐州市'],'浙江省':['杭州市','宁波市','温州市','嘉兴市','绍兴市','金华市'],'安徽省':['合肥市','芜湖市','蚌埠市','淮南市','阜阳市','安庆市'],'福建省':['福州市','厦门市','泉州市','漳州市','莆田市'],'江西省':['南昌市','赣州市','九江市','宜春市','上饶市'],'山东省':['济南市','青岛市','烟台市','潍坊市','临沂市','淄博市'],'河南省':['郑州市','洛阳市','开封市','新乡市','南阳市','信阳市'],'湖北省':['武汉市','宜昌市','襄阳市','荆州市','黄冈市','十堰市'],'湖南省':['长沙市','株洲市','湘潭市','衡阳市','岳阳市','常德市'],'广东省':['广州市','深圳市','东莞市','佛山市','珠海市','中山市'],'广西壮族自治区':['南宁市','桂林市','柳州市','梧州市','北海市'],'海南省':['海口市','三亚市','儋州市','琼海市'],'重庆市':['渝中区','江北区','南岸区','沙坪坝区','九龙坡区','渝北区'],'四川省':['成都市','绵阳市','德阳市','南充市','宜宾市','泸州市'],'贵州省':['贵阳市','遵义市','六盘水市','黔南州'],'云南省':['昆明市','曲靖市','玉溪市','大理州','红河州'],'西藏自治区':['拉萨市','日喀则市','昌都市'],'陕西省':['西安市','咸阳市','宝鸡市','渭南市','汉中市','榆林市'],'甘肃省':['兰州市','天水市','酒泉市','嘉峪关市'],'青海省':['西宁市','海东市'],'宁夏回族自治区':['银川市','石嘴山市','吴忠市'],'新疆维吾尔自治区':['乌鲁木齐市','克拉玛依市','吐鲁番市','喀什地区']};
+
+// 状态
+const S={sid:localStorage.sid||'',ut:'',md:'',st:0,ts:7,rt:'education',prov:'',c1:false,c2:false,c3:false,cm:'template',aiP:'',aiR:'',aiL:false,ot:'',oR:'',oL:false,dn:false};
+
+function uid(){const a=new Uint8Array(16);crypto.getRandomValues(a);return Array.from(a,b=>b.toString(16).padStart(2,'0')).join('')}
+const Q=s=>document.querySelector(s);
+
+function us(){const fi=Q('#pf'),si=Q('#si'),iw=Q('#idxw');if(S.st===0){si.textContent='开始';fi.style.width='0%'}else{si.textContent=`步骤 ${S.st}/${S.ts}`;fi.style.width=((S.st/S.ts)*100)+'%'}if(S.md==='free'&&S.st>=1)iw.classList.remove('hid');else iw.classList.add('hid')}
+
+function gs(n){if(S.md==='guided'&&n>S.st+1&&n!==0)return;S.st=Math.max(0,Math.min(n,S.ts));rd()}
+function rd(){us();if(S.md==='free'&&S.st>=1)rix();if(S.st===0)r0();else if(S.st===1)r1();else if(S.st===2)r2();else if(S.st===3)r3();else if(S.st===4)r4();else if(S.st===5)r5();else if(S.st===6)r6();else if(S.st===7)r7();window.scrollTo(0,0)}
+function rix(){Q('#ix').innerHTML=['①渠道','②问题','③证据','④保护','⑤地图','⑥撰写','⑦结束'].map((s,i)=>{const n=i+1;return'<button class="idx-btn'+(S.st===n?' on':'')+'" onclick="gs('+n+')">'+s+'</button>'}).join('')}
+
+// API
+async function apiCall(p,d){try{const r=await fetch('/api'+p,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(d)});return r.json()}catch(e){return{}}}
+
+// 入口
+function r0(){Q('#app').innerHTML=`<div class="step" style="text-align:center;padding-top:20px"><div class="card" style="padding:32px 20px"><div style="font-size:44px;margin-bottom:10px">️</div><h2 style="font-size:24px;margin-bottom:4px">教你举报</h2><p style="color:var(--text2);font-size:14px;margin-bottom:24px">精准举报 · 保护自己 · 打破信息差</p><div style="max-width:240px;margin:0 auto;display:flex;flex-direction:column;gap:8px"><button class="btn btn-p" onclick="si(&apos;new&apos;)">首次使用</button><button class="btn btn-o" onclick="si(&apos;returning&apos;)">来过多次</button></div></div></div>`}
+async function si(t){if(!S.sid){S.sid=uid();localStorage.sid=S.sid}S.ut=t;await apiCall('/visit',{session_id:S.sid,page:'/'});await apiCall('/user-type',{session_id:S.sid,user_type:t});rt()}
+function rt(){Q('#app').innerHTML='<div class="step" style="text-align:center;padding-top:16px"><div class="card" style="padding:28px 20px"><h2 style="margin-bottom:12px"> 温馨提示</h2><div style="text-align:left;max-width:320px;margin:0 auto 18px"><p style="font-size:13px;margin-bottom:8px">⏱ 全程约 5–10 分钟</p><p style="font-size:13px;margin-bottom:8px"> 每个字都值得认真看，已是最精简</p><p style="font-size:13px;margin-bottom:8px"> 前面都是阅读学习，最后才是撰写帮助</p><p style="font-size:13px;color:var(--accent);font-weight:600"> 查阅建议自由模式 · 举报建议一站式</p></div><button class="btn btn-p" style="width:100%;max-width:240px" onclick="rm()">我知道了</button></div></div>'}
+function rm(){Q('#app').innerHTML='<div class="step" style="text-align:center;padding-top:16px"><div class="card" style="padding:28px 20px"><h2 style="margin-bottom:14px">选择浏览模式</h2><div style="max-width:280px;margin:0 auto;display:flex;flex-direction:column;gap:8px"><button class="btn btn-p" onclick="sm(\'guided\')"><span style="display:block">一站式 · 按步骤走</span><span style="display:block;font-size:11px;font-weight:400;opacity:.8;margin-top:3px">必须顺序完成，不可跳过</span></button><button class="btn btn-o" onclick="sm(\'free\')"><span style="display:block">自由模式 · 任意切换</span><span style="display:block;font-size:11px;font-weight:400;opacity:.8;margin-top:3px">通过顶部索引自由跳转页面</span></button></div></div></div>'}
+async function sm(m){S.md=m;await apiCall('/mode-select',{session_id:S.sid,mode:m});S.st=1;rd()}
+
+// 步骤1
+function r1(){const ie=S.rt==='education';const nl=ie?EN:GN;const nr=nl.map(r=>'<tr><td style="font-weight:600;color:var(--text)">'+r.dept+'</td><td>'+(r.ph||'—')+'</td><td>'+(r.em||'—')+'</td><td>'+(r.web||'—')+'</td></tr>').join('');
+  let ph='';if(S.prov){const pd=ie?EP:GP;if(pd&&pd[S.prov]){const d=pd[S.prov];if(ie)ph='<tr style="border-left:3px solid var(--accent)"><td style="font-weight:600;color:var(--accent)">'+d.dept+'</td><td>'+d.ph+'</td><td>'+d.em+'</td><td>'+d.web+'</td></tr>';else ph='<tr style="border-left:3px solid var(--accent)"><td style="font-weight:600;color:var(--accent)">12388纪检监察</td><td>'+d.p88+'</td><td>—</td><td>'+d.web+'</td></tr><tr><td>12380组织人事</td><td>'+d.p80+'</td><td>—</td><td>'+d.web+'</td></tr><tr><td>12345政务热线</td><td>'+d.p45+'</td><td>—</td><td>'+d.web+'</td></tr>'}}
+  Q('#app').innerHTML='<div class="step"><div class="ttl">步骤一：选择举报类型与省份</div><div class="card"><div class="fg"><label>举报类型</label><select onchange="S.rt=this.value;S.prov=\'\';r1()"><option value="education"'+(!ie?'':' selected')+'> 教育举报</option><option value="municipal"'+(ie?'':' selected')+'> 综合政务举报</option></select></div><div class="fg"><label>省份</label><select onchange="S.prov=this.value;r1()"><option value="">请选择</option>'+P.map(p=>'<option value="'+p+'"'+((S.prov===p)?' selected':'')+'>'+p+'</option>').join('')+'</select></div></div><div class="card"><h3> 国家级渠道（全国通用）</h3><div style="overflow-x:auto"><table><thead><tr><th style="width:30%">受理部门</th><th style="width:25%">电话</th><th style="width:30%">邮箱/网址</th><th style="width:15%">小程序</th></tr></thead><tbody>'+nr+'</tbody></table></div></div>'+(S.prov?'<div class="card" style="border:1.5px solid var(--accent)"><h3 style="color:var(--accent)"> '+S.prov+' 省级渠道</h3><div style="overflow-x:auto"><table><tbody>'+ph+'</tbody></table></div><p style="margin-top:10px;font-size:12px;color:var(--text2)"> '+(ie?'普通管理走省教育厅；涉违纪违法直接打国家级12388':'行政效能走12345；违纪违法必须走12388纪检')+'</p></div>':'')+'<div style="display:flex;gap:8px;justify-content:space-between;margin-top:14px">'+(S.md==='free'?'<button class="btn btn-s btn-ss" onclick="gs(0)">返回</button>':'<span></span>')+'<button class="btn btn-p" onclick="gs(2)">下一步</button></div></div>'}
+
+// 步骤2-4
+function r2(){Q('#app').innerHTML='<div class="step"><div class="ttl">步骤二：常见问题与重要提醒</div><div class="card"><h3> 常见担心</h3>'+[['身份泄露怎么办？','《信访工作条例》禁止将举报材料转交被举报人。实名举报受法律严格保护。'],['学校和教育局有关系？','直接向省级教育厅纪检监察组或12388举报，切断地方保护。'],['教育局已读不回？','地方邮箱电话已边缘化。必须拉高到省级/国家级。'],['被校方"自愿"逼迫？','任何以行政权力为后盾的"自愿"均属变相胁迫。保留证据后举报。']].map(([t,d])=>'<div class="about"><b>'+t+'</b>'+d+'</div>').join('')+'</div><div class="card"><h3>️ 核心要点</h3>'+[['拉高举报层级','属地举报易被推诿，省级和国家级才是有效途径'],['讲技巧','用"法言法语"锁定违规红线'],['证据最关键','截图不顶用，必须录屏+区块链存证'],['保护自己第一位','注意打印机暗记、网络隔离、身份加密']].map(([t,d])=>'<div class="cn" style="cursor:default;border-left:3px solid var(--accent)"><div class="cl"><b>'+t+'</b><span>'+d+'</span></div></div>').join('')+'</div><div style="display:flex;gap:8px;justify-content:space-between;margin-top:14px"><button class="btn btn-s" onclick="gs(1)">上一步</button><button class="btn btn-p" onclick="gs(3)">下一步</button></div></div>'}
+function r3(){Q('#app').innerHTML='<div class="step"><div class="ttl">步骤三：证据采集要求</div><div class="al-red"> 电子证据不规范=法庭不采信</div><div class="card"><h3> 微信/QQ — 录屏法</h3><ul><li>录制前先展示北京时间和网络环境</li><li>必须进入对方个人信息主页，展示实名绑定的手机号</li><li>从第一条关联记录开始完整慢速拖动，不可中断</li><li>语音、图片、链接逐一点开展示</li></ul></div><div class="card"><h3> 电话/现场录音</h3><ul><li>对话中自然说出时间、地点、对方全名+职务</li><li>引导对方说出金额、违规指令等核心事实</li><li>绝对禁止剪辑，保留原始载体备查</li></ul></div><div class="card"><h3> 区块链存证（推荐）</h3><ul><li>使用"存证云""粤存证"等司法存证APP</li><li>数据生成哈希值自动上链</li><li>举证责任转移至被举报方</li></ul></div><div style="display:flex;gap:8px;justify-content:space-between;margin-top:14px"><button class="btn btn-s" onclick="gs(2)">上一步</button><button class="btn btn-p" onclick="gs(4)">下一步</button></div></div>'}
+function r4(){Q('#app').innerHTML='<div class="step"><div class="ttl">步骤四：保护自己</div><div class="al-yl"> 这些细节能救你</div><div class="card"><h3> 彩色激光打印机暗记</h3><ul><li>彩色打印机在纸张上印有黄色暗记点阵，含序列号+精确时间</li><li>被截获后可通过蓝光解码，瞬间锁定打印者身份</li><li>&#10003; 用家用黑白激光/喷墨打印机</li><li>&#10003; 去无监控图文店现金支付</li><li>&#10007; 绝不用单位彩色打印机</li></ul></div><div class="card"><h3> 网络隔离</h3><ul><li>不在单位局域网/办公WiFi下做举报操作</li><li>用个人手机4G/5G蜂窝网络独立完成</li></ul></div><div class="card"><h3> 身份保护</h3><ul><li>使用国家网络身份认证App实现"可用不可见"</li><li>不走单位邮箱发送材料</li><li>用非工作常用手机号作为联络方式</li></ul></div><div style="display:flex;gap:8px;justify-content:space-between;margin-top:14px"><button class="btn btn-s" onclick="gs(3)">上一步</button><button class="btn btn-p" onclick="gs(5)">下一步</button></div></div>'}
+
+// 步骤5 - 地图
+let c5=null;
+function r5(){Q('#app').innerHTML='<div class="step"><div class="ttl">步骤五：填写并标记举报地点</div><div class="al-yl" style="margin-bottom:10px"> 请完整填写，匿名提交（仅地区和大致描述，不含姓名电话）</div><div class="card"><h3> 提交举报地点</h3><div class="fg"><label>举报类型</label><select id="s5t"><option value="education"> 教育举报</option><option value="municipal"> 综合政务举报</option></select></div><div class="fr"><div class="fg"><label>省份</label><select id="s5p" onchange="s5oc()"><option value="">请选择</option>'+P.map(p=>'<option>'+p+'</option>').join('')+'</select></div><div class="fg"><label>城市</label><select id="s5c"><option value="">先选省份</option></select></div></div><div class="fg"><label>区/县（选填）</label><input id="s5d" placeholder="如：海淀区"></div><div class="fg"><label>问题描述（不超过200字）</label><textarea id="s5x" maxlength="200" placeholder="简要描述问题"></textarea></div><button class="btn btn-p" id="s5b" onclick="s5s()" style="width:100%"> 提交并标记地图</button></div><div class="card"><h3> 全国举报热力地图</h3><div id="s5m" style="width:100%;height:360px;border-radius:10px;overflow:hidden"></div><div id="s5info" style="font-size:11px;color:var(--text2);margin-top:4px;text-align:center"></div><p style="font-size:11px;color:var(--text3);margin-top:2px"> 标记大小表示举报次数 · 点击标记查看详情</p></div><div style="display:flex;gap:8px;justify-content:space-between;margin-top:14px"><button class="btn btn-s" onclick="gs(4)">上一步</button><button class="btn btn-p" onclick="gs(6)">下一步</button></div></div>';l5m()}
+function s5oc(){const p=Q('#s5p').value;const cs=PC[p]||[];Q('#s5c').innerHTML=cs.length?cs.map(c=>'<option>'+c+'</option>').join(''):'<option>暂无城市数据</option>'}
+async function s5s(){const t=Q('#s5t').value,p=Q('#s5p').value,c=Q('#s5c').value,d=Q('#s5d').value.trim(),x=Q('#s5x').value.trim();if(!p||!c){showModal('!','提示','请选择省份和城市');return}if(!x){showModal('!','提示','请填写问题描述');return}const b=Q('#s5b');b.disabled=true;b.innerHTML='<span class="spn"></span> 提交中';const r=await apiCall('/heatmap',{session_id:S.sid,report_type:t,province:p,city:c,district:d,description:x});b.disabled=false;b.innerHTML=' 提交并标记地图';if(r.error){showModal('!','错误',r.error);return}showModal('&#10003;','成功','提交成功！');Q('#s5x').value='';l5r()}
+let gld=false;
+async function l5m(){const el=Q('#s5m');if(!el)return;var loadEl=document.createElement('div');loadEl.style.cssText='color:var(--text2);text-align:center;padding:80px';loadEl.textContent='⏳ 加载地图组件...';el.appendChild(loadEl);
+try{
+if(!window.echarts){
+loadEl.textContent='⏳ 加载ECharts...';
+await new Promise((res,rej)=>{const s=document.createElement('script');s.src='/lib/echarts.min.js';s.onload=res;s.onerror=()=>rej(new Error('ECharts load failed'));document.head.appendChild(s)})
+}
+loadEl.textContent='⏳ 加载地图数据...';
+if(!gld){const geo=await(await fetch('/china-geo.json')).json();echarts.registerMap('china',geo);gld=true}
+loadEl.textContent='⏳ 初始化...';
+if(c5){try{c5.dispose()}catch(e){}}
+c5=echarts.init(el);
+if(!c5){loadEl.textContent='地图初始化失败，请刷新页面';return}
+if(loadEl.parentNode)loadEl.parentNode.removeChild(loadEl);
+l5r();
+window.addEventListener('resize',()=>{if(c5)c5.resize()})
+}catch(e){if(loadEl.parentNode)loadEl.textContent='地图加载失败: '+e.message;console.error(e)}
+}
+async function l5r(){if(!c5)return;try{const r=await fetch('/api/public/points');const pts=await r.json();const data=pts.filter(function(p){var k=p.city;var ok=!!CL[k];return ok}).map(function(p){var c=CL[p.city];return{name:p.city,value:[c[0],c[1],p.count],province:p.province,rtype:p.report_type}});if(!c5)return;const isDark=document.documentElement.getAttribute('data-theme')==='dark';c5.setOption({tooltip:{trigger:'item',confine:true,backgroundColor:'rgba(28,28,30,.92)',borderColor:'#444',textStyle:{color:'#fff',fontSize:12},formatter:function(p){if(!p.value||!p.data)return p.name||'';var d=p.data;return'<b>'+p.name+'</b><br>省份：'+(d.province||'')+'<br>举报次数：<b style=\"color:#fb6a4a\">'+(p.value[2]||0)+'</b><br>类型：'+(d.rtype==='education'?'教育':'政务')}},visualMap:{show:true,min:0,max:Math.max(1,data.reduce(function(m,p){return Math.max(m,p.value[2])},0)),left:10,top:'bottom',text:['多','少'],calculable:true,orient:'vertical',inRange:{color:['#fee5d9','#fcae91','#fb6a4a','#cb181d','#67000d']},textStyle:{color:isDark?'#999':'#666',fontSize:11}},geo:{map:'china',roam:true,zoom:1.2,scaleLimit:{min:0.8,max:4},label:{show:false},itemStyle:{areaColor:isDark?'#4a5568':'#e8e8ed',borderColor:isDark?'#a0aec0':'#999',borderWidth:1},emphasis:{label:{show:true,color:'#333'},areaColor:'#ffd591'}},series:[{type:'scatter',coordinateSystem:'geo',geoIndex:0,data:data.map(function(d){return{name:d.name,value:[d.value[0],d.value[1],d.value[2]],province:d.province,rtype:d.rtype}}),symbolSize:14,itemStyle:{color:'#e74c3c'}}]});}catch(e){console.error('Map render error:',e);if(c5)c5.dispose();var el=document.getElementById('s5m');if(el)el.innerHTML='<div style=\"color:var(--accent);text-align:center;padding:80px\">地图渲染失败</div>'} }
+
+// 步骤6
+function r6(){const ac=S.c1&&S.c2&&S.c3;Q('#app').innerHTML='<div class="step"><div class="ttl">步骤六：确认清单与撰写举报书</div><div class="card"><h3>&#10003; 请逐项确认</h3>'+[['c1',' 证据采集已完成','录屏/录音/区块链存证已按要求完成'],['c2',' 正确举报渠道已确认','已选择省级/国家级举报渠道'],['c3',' 保护措施已落实','打印机、网络、身份防反查准备完毕']].map(([k,ti,ds])=>'<div class="cn'+(S[k]?' ck':'')+'" onclick="tc(\''+k+'\')"><div class="cx">'+(S[k]?'&#10003;':'')+'</div><div class="cl"><b>'+ti+'</b><span>'+ds+'</span></div></div>').join('')+'</div><div class="card"><h3> 撰写举报书</h3><div class="tbs"><button class="tb'+(S.cm==='template'?' on':'')+'" onclick="sc(\'template\')">模板编辑</button>'+(S.md!=='free'?'<button class="tb'+(S.cm==='ai'?' on':'')+'" onclick="sc(\'ai\')">AI 生成</button>':'')+'<button class="tb'+(S.cm==='obfuscate'?' on':'')+'" onclick="sc(\'obfuscate\')">文本混淆</button></div><div id="ca"></div></div><div style="display:flex;gap:8px;justify-content:space-between;margin-top:14px"><button class="btn btn-s" onclick="gs(5)">上一步</button><button class="btn btn-p" onclick="gs(7)"'+(ac?'':' disabled')+'>'+(ac?'完成举报流程':'请先确认所有项目')+'</button></div></div>';rc()}
+function tc(k){S[k]=!S[k];r6()}
+function sc(m){S.cm=m;r6()}
+function rc(){const a=Q('#ca');if(!a)return;if(S.cm==='template'){const t='标题：关于[被举报人姓名/单位]涉嫌严重违纪违法、利益输送的检举控告\n\n呈送受理机构：[上级纪委监委 / 省教育厅纪检监察组]\n\n一、被举报人基本信息\n姓名：[填写]\n单位及职务：[填写]\n政治面貌及职级：[填写]\n\n二、违法违纪事实\n1. 于[时间]，[被举报人]在[场景]中，违规操作……\n2. 经取证，[被举报人]与[第三方]存在利益输送……\n3. 此前向[属地部门]反映，遭推诿敷衍，涉嫌行政不作为……\n\n三、证据清单\n1. 微信聊天记录录屏（已上链存证，哈希校验码：[XXX]）\n2. 转账记录详情截图\n3. 现场交涉原始录音（未剪辑，原载体保存）\n\n四、核心诉求\n恳请上级机关依规启动提级办理与挂牌督办程序，\n彻查上述违法违纪行为，并对前期"推诿敷衍"的\n属地执法人员进行专项执纪问责。\n\n举报人：[姓名 / 双盲匿名]\n联系电话：[非工作常用号码]\n日期：'+new Date().toLocaleDateString('zh-CN');a.innerHTML='<div class="rel"><button class="cop" onclick="cp(\'tp\')">复制</button><textarea id="tp" style="min-height:380px;font-size:12px;line-height:1.7">'+t+'</textarea></div><p style="font-size:11px;color:var(--text3);margin-top:4px">在模板上直接修改，完成后复制使用</p>'}else if(S.cm==='ai'){a.innerHTML='<div class="fg"><label>描述你要举报的问题</label><textarea id="ap" placeholder="例如：某中学校长在食堂招标中收受回扣……" style="min-height:80px">'+S.aiP+'</textarea></div><button class="btn btn-p" onclick="dai()" style="width:100%"'+(S.aiL?' disabled':'')+'>'+(S.aiL?'<span class="spn"></span> 生成中……':' AI 生成举报信')+'</button>'+(S.aiR?'<div style="margin-top:12px" class="rel"><button class="cop" onclick="cp(\'ar\')">复制</button><textarea id="ar" style="min-height:280px;font-size:12px;line-height:1.7" readonly>'+S.aiR+'</textarea></div>':'')+'<p style="font-size:11px;color:var(--text3);margin-top:4px">由后端调用AI服务，密钥安全存储</p>'}else{a.innerHTML='<p style="font-size:12px;color:var(--text2);margin-bottom:8px">Google Translate API 双重翻译混淆（中→英→中）</p><div class="fg"><label>输入文本</label><textarea id="oi" style="min-height:80px">'+S.ot+'</textarea></div><button class="btn btn-p" onclick="dob()" style="width:100%"'+(S.oL?' disabled':'')+'>'+(S.oL?'<span class="spn"></span> 混淆中……':' 混淆处理')+'</button>'+(S.oR?'<div style="margin-top:12px" class="rel"><button class="cop" onclick="cp(\'or\')">复制</button><textarea id="or" style="min-height:120px;font-size:12px;line-height:1.7" readonly>'+S.oR+'</textarea></div>':'')}}
+async function dai(){const p=Q('#ap')?.value?.trim();if(!p){showModal('!','提示','请描述问题');return}S.aiP=p;S.aiL=true;r6();try{const r=await apiCall('/ai-generate',{session_id:S.sid,prompt:p,user_type:S.ut});S.aiR=r.content||'生成失败'}catch(e){S.aiR='AI服务暂时不可用'}S.aiL=false;r6()}
+async function dob(){const t=Q('#oi')?.value?.trim();if(!t){showModal('!','提示','请输入文本');return}S.ot=t;S.oL=true;r6();try{const r=await apiCall('/text-obfuscate',{text:t});S.oR=r.obfuscated||t}catch(e){S.oR=t}S.oL=false;r6()}
+function cp(id){const ta=document.getElementById(id);if(!ta)return;ta.select();try{document.execCommand('copy');showModal('&#10003;','已复制','内容已复制到剪贴板')}catch(e){}window.getSelection().removeAllRanges()}
+
+// 步骤7
+function r7(){if(!S.dn){S.dn=true;apiCall('/complete',{session_id:S.sid})}
+Q('#app').innerHTML='<div class="step"><div class="card" style="text-align:center;padding:36px 20px"><div style="font-size:48px;margin-bottom:6px">&#10003;</div><h2 style="font-size:22px;margin-bottom:6px">感谢你的信任</h2><p style="color:var(--text2);margin-bottom:2px">每一次举报，都是对公平正义的守护</p><p style="color:var(--accent);font-weight:600;margin-bottom:16px">请务必按照指南保护好自己</p><div class="dv"><p style="font-size:12px;color:var(--text2);margin-bottom:10px">如果觉得有帮助，欢迎支持（此处可放你的赞赏码）</p></div><div style="text-align:center"><img src="/wechat.jpg" style="width:120px;height:120px;border-radius:8px;display:block" alt="微信"><span style="font-size:10px;color:var(--text3)">微信</span></div></div></div><div style="margin-top:16px"><a href="/heatmap" class="btn btn-p btn-ss" style="text-decoration:none;display:inline-block">查看全国举报热力图</a></div>'+(S.md!=='free'?'<div style="margin-top:16px"><p style="font-size:13px;color:var(--text2);margin-bottom:8px">这个网站对你有帮助吗？</p><div style="display:flex;gap:8px;justify-content:center"><button class="btn btn-p btn-ss" onclick="fbd(\'yes\')"> 有帮助</button><button class="btn btn-s btn-ss" onclick="fbd(\'no\')">没有帮助</button></div></div>':'')+'<div style="margin-top:20px"><button class="btn btn-o btn-ss" onclick="S.st=0;S.md=\'\';rd()">回到首页</button></div></div></div>'}
+var S_fd=false;async function fbd(v){if(S_fd)return;S_fd=true;await apiCall('/feedback',{session_id:S.sid,helpful:v});showModal('&#10003;','感谢反馈','你的意见会帮助我们做得更好');var btns=document.querySelectorAll('#app .btn-ss');btns.forEach(function(b){if(b.textContent.indexOf('有帮助')>-1||b.textContent.indexOf('没有帮助')>-1)b.disabled=true})}function showModal(icon,title,msg){var d=document.createElement('div');d.style.cssText='position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center';d.innerHTML='<div style=\"background:var(--bg2);padding:28px 24px;border-radius:16px;text-align:center;max-width:300px;width:90%;animation:mdlIn .3s ease\"><div style=\"font-size:36px;margin-bottom:8px\">'+icon+'</div><p style=\"font-size:16px;font-weight:700;color:var(--text);margin-bottom:4px\">'+title+'</p><p style=\"font-size:12px;color:var(--text2);margin-bottom:16px\">'+msg+'</p><button style=\"padding:10px 32px;border:none;border-radius:18px;background:var(--accent);color:#fff;font-size:14px;font-weight:600;cursor:pointer;font-family:var(--font)\">关闭</button></div>';document.body.appendChild(d);d.querySelector('button').addEventListener('click',function(){d.remove()});d.addEventListener('click',function(e){if(e.target===d)d.remove()})}
+function showInstallGuide(){if(typeof dp!=='undefined'&&dp!==null){dp.prompt();dp.userChoice.then(function(r){if(r.outcome==='accepted'){var b=document.getElementById('installBtn');if(b)b.textContent='已安装'}dp=null});return}var u=navigator.userAgent;var g;if(u.indexOf('iPhone')>-1||u.indexOf('iPad')>-1){g='Safari: 点击分享按钮(底部中间) > 滑动找"添加到主屏幕" > 点添加'}else if(u.indexOf('Android')>-1){g='Chrome/Edge/Samsung: 打开菜单(右上角三点) > 选择"安装应用"或"添加到主屏幕"'}else if(u.indexOf('Edg')>-1){g='Edge: 地址栏右侧安装图标(⊕), 若无则打开菜单 > 应用 > 将此站点作为应用安装'}else if(u.indexOf('Chrome')>-1){g='Chrome: 地址栏右侧安装图标(⊕), 若无则打开菜单(右上角三点) > 安装应用'}else{g='打开浏览器菜单, 找到"安装应用"或"添加到主屏幕"'};showModal('&#43;','PWA 安装指南',g)}
+
+// 主题
+function ith(){const s=localStorage.getItem('theme');if(s==='dark'||(!s&&window.matchMedia('(prefers-color-scheme:dark)').matches)){document.documentElement.setAttribute('data-theme','dark')}utb()}
+function tt(){const d=document.documentElement.getAttribute('data-theme')==='dark';document.documentElement.setAttribute('data-theme',d?'':'dark');localStorage.setItem('theme',d?'light':'dark');utb()}
+function utb(){const b=Q('#tb');if(!b)return;const d=document.documentElement.getAttribute('data-theme')==='dark';b.innerHTML=d?'&#9728;':'&#9790;';document.querySelector('meta[name="theme-color"]').content=d?'#0d0d0d':'#f5f5f7'}
+
+// 启动
+(function(){if(!S.sid){S.sid=uid();localStorage.sid=S.sid}ith();Q('#tb').addEventListener('click',tt);if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js');navigator.serviceWorker.getRegistrations().then(rs=>rs.forEach(r=>r.update()))}var dp=null;window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();dp=e;var b=document.getElementById('installBtn');if(b){b.style.background='var(--accent)';b.style.color='#fff';b.style.fontWeight='600';b.textContent='✓ 点击安装';b.onclick=function(){dp.prompt();dp.userChoice.then(function(r){if(r.outcome==='accepted')b.textContent='已安装';dp=null})}}});rd()})();
+</script></body></html>

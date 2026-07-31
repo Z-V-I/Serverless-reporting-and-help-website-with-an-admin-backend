@@ -1,0 +1,26 @@
+# Cloudflare Wrangler 配置 - 教你举报
+name = "jiaoni-jubao"
+compatibility_date = "2024-07-30"
+compatibility_flags = ["nodejs_compat"]
+pages_build_output_dir = "public"
+
+# D1 数据库绑定
+[[d1_databases]]
+binding = "DB"
+database_name = "jiaoni-jubao-db"
+database_id = "your-d1-database-id"
+
+# KV 命名空间（验证码和登录 Token）
+[[kv_namespaces]]
+binding = "KV"
+id = "your-kv-namespace-id"
+
+# 邮件中继（新加坡服务器）
+[vars]
+RELAY_TOKEN = "your-relay-secret-token"
+MAIL_RELAY_URL = "http://your-vps-ip:3457"
+ADMIN_EMAIL = "your-admin-email@example.com"
+ADMIN_PASSWORD = "your-admin-password"
+AI_API_KEY = "your-deepseek-api-key"
+AI_API_URL = "https://api.deepseek.com/v1/chat/completions"
+AI_MODEL = "deepseek-chat"

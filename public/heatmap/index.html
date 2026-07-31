@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<meta name="theme-color" content="#0a0a0a">
+<title>教你举报 - 热力地图</title>
+<link rel="icon" href="/logo.svg">
+<link rel="manifest" href="/manifest.json">
+<link rel="apple-touch-icon" href="/icons/icon-192.png">
+<link rel="icon" href="/icons/icon-192.png">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","Microsoft YaHei",sans-serif;background:#0a0a0a;color:#e0e0e0;min-height:100vh;line-height:1.55;-webkit-font-smoothing:antialiased}
+body.light{background:#f8f8f8;color:#1a1a1a}
+
+.hd{position:sticky;top:0;z-index:99;background:rgba(10,10,10,.88);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid #222;padding:12px 24px;display:flex;align-items:center;justify-content:space-between}
+body.light .hd{background:rgba(255,255,255,.88);border-bottom:1px solid #ddd}
+.hd-t{font-size:17px;font-weight:700;letter-spacing:-.01em}
+.hd-r{display:flex;gap:8px;align-items:center}
+.hd a{font-size:13px;padding:6px 14px;border-radius:16px;text-decoration:none;color:#999;border:1px solid #333;transition:all .2s}
+body.light .hd a{color:#666;border-color:#ccc}
+.hd a:hover{color:#c0392b;border-color:#c0392b}
+.tgl{width:34px;height:34px;border-radius:50%;border:1px solid #333;background:transparent;cursor:pointer;font-size:16px;color:#e0e0e0;display:flex;align-items:center;justify-content:center;transition:all .2s}
+body.light .tgl{color:#1a1a1a;border-color:#ccc}
+.tgl:hover{border-color:#c0392b;color:#c0392b}
+
+.ctn{max-width:1040px;margin:0 auto;padding:20px 20px 40px}
+
+.hero{font-size:26px;font-weight:800;letter-spacing:-.02em;margin-bottom:18px;color:#fff}
+body.light .hero{color:#111}
+
+.sg{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:18px}
+.sc{background:#141414;border:1px solid #222;border-radius:12px;padding:18px 20px;transition:border-color .3s}
+body.light .sc{background:#fff;border-color:#ddd}
+.sc:hover{border-color:#c0392b}
+.sn{font-size:28px;font-weight:800;color:#c0392b;letter-spacing:-.02em;line-height:1.1}
+.sl{font-size:12px;color:#777;margin-top:4px;text-transform:uppercase;letter-spacing:.05em}
+body.light .sl{color:#999}
+.sc.red .sn{color:#c0392b}
+.sc.white .sn{color:#e0e0e0}body.light .sc.white .sn{color:#1a1a1a}
+
+.card{background:#141414;border:1px solid #222;border-radius:12px;padding:16px 18px;margin-bottom:12px;transition:all .3s}
+body.light .card{background:#fff;border-color:#ddd}
+.card h3{font-size:15px;font-weight:700;margin-bottom:10px;color:#fff;letter-spacing:-.01em}
+body.light .card h3{color:#111}
+
+#map{width:100%;height:460px;border-radius:10px;overflow:hidden}
+
+.fr{display:flex;flex-wrap:wrap;gap:8px;align-items:flex-end;margin-bottom:12px}
+.fi{flex:1;min-width:100px}
+.fi label{display:block;font-size:11px;color:#666;margin-bottom:3px;font-weight:600}
+body.light .fi label{color:#888}
+.fi input,.fi select{width:100%;padding:9px 10px;background:#0a0a0a;border:1.5px solid #222;border-radius:8px;color:#e0e0e0;font-size:13px;font-family:inherit;-webkit-appearance:none}
+body.light .fi input,body.light .fi select{background:#f8f8f8;border-color:#ddd;color:#1a1a1a}
+.fi input:focus,.fi select:focus{outline:none;border-color:#c0392b}
+select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%23777' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;padding-right:30px}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;padding:9px 18px;border:none;border-radius:18px;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;font-family:inherit}
+.btn:active{transform:scale(.97)}
+.btn-p{background:#c0392b;color:#fff;box-shadow:0 2px 8px rgba(192,57,43,.25)}
+.btn-p:hover{background:#e74c3c}
+.btn-s{background:#222;color:#999}body.light .btn-s{background:#eee;color:#666}
+
+.rl{display:grid;gap:4px}
+.ri{display:flex;align-items:center;gap:10px;padding:9px 14px;background:#0a0a0a;border-radius:8px;font-size:13px}
+body.light .ri{background:#f8f8f8}
+.rn{font-size:16px;font-weight:800;color:#c0392b;min-width:26px;text-align:center}
+.rt{flex:1;color:#e0e0e0;font-weight:500}body.light .rt{color:#1a1a1a}
+.rc{color:#777;font-weight:600;font-size:12px}
+
+table{width:100%;border-collapse:collapse;font-size:12px}
+th{padding:9px 10px;background:#0a0a0a;color:#777;font-weight:600;text-align:left;font-size:10px;letter-spacing:.04em;text-transform:uppercase;border-bottom:2px solid #222}
+body.light th{background:#f0f0f0;color:#999;border-bottom-color:#ddd}
+td{padding:10px;border-bottom:1px solid #222;color:#999;vertical-align:top;line-height:1.5}
+body.light td{border-bottom-color:#eee}
+td.td-v{color:#e0e0e0;font-weight:500;max-width:280px;word-break:break-word}body.light td.td-v{color:#1a1a1a}
+td.td-l{color:#c0392b;font-weight:600;white-space:nowrap}
+td.td-t{font-size:11px;color:#555;white-space:nowrap}
+.tag{display:inline-block;padding:2px 8px;border-radius:8px;font-size:10px;font-weight:700;letter-spacing:.02em}
+.tag-e{background:rgba(192,57,43,.15);color:#c0392b}
+.tag-g{background:rgba(192,57,43,.08);color:#e74c3c}
+
+.pg{display:flex;gap:4px;justify-content:center;margin-top:12px;flex-wrap:wrap}
+.pg-btn{min-width:30px;height:30px;padding:0 8px;border-radius:8px;border:1px solid #222;background:#141414;color:#999;cursor:pointer;font-size:12px;transition:all .2s}
+body.light .pg-btn{background:#fff;border-color:#ddd;color:#666}
+.pg-btn:hover:not(:disabled){border-color:#c0392b;color:#c0392b}
+.pg-btn.on{background:#c0392b;color:#fff;border-color:#c0392b}
+.pg-btn:disabled{opacity:.3;cursor:not-allowed}
+
+.ft{text-align:center;padding:24px 16px;color:#444;font-size:11px;border-top:1px solid #222;margin-top:18px}
+body.light .ft{border-top-color:#ddd;color:#aaa}
+
+.sp{width:16px;height:16px;border:2px solid #333;border-top-color:#c0392b;border-radius:50%;animation:sp .7s linear infinite;display:inline-block}
+@keyframes sp{to{transform:rotate(360deg)}}
+@media(max-width:640px){.sg{grid-template-columns:repeat(2,1fr)}.sn{font-size:22px}#map{height:340px}.ctn{padding:12px 10px 30px}}
+</style></head><body>
+<div class="hd"><span class="hd-t">教你举报 - 热力地图</span><div class="hd-r"><a href="/">主站</a><button class="tgl" id="tb" title="切换模式"><span id="ti">&#9790;</span></button></div></div>
+<div class="ctn">
+  <div class="hero">全国举报分布</div>
+  <div class="sg" id="sg"></div>
+  <div class="card"><h3>中国举报热力图</h3>
+    <div class="fr">
+      <div class="fi"><label>类型</label><select id="ft"><option value="">全部</option><option value="education">教育举报</option><option value="municipal">政务举报</option></select></div>
+      <div class="fi"><label>省份</label><select id="fp"><option value="">全部</option></select></div>
+      <div class="fi"><label>开始日期</label><input type="date" id="fs"></div>
+      <div class="fi"><label>结束日期</label><input type="date" id="fe"></div>
+      <button class="btn btn-p" onclick="af()">筛选</button>
+      <button class="btn btn-s" onclick="rf()">重置</button>
+    </div>
+    <div id="map"></div>
+  </div>
+  <div class="card"><h3>举报高发地</h3><div class="rl" id="rk"></div></div>
+  <div class="card"><h3>举报数据 &middot; <span id="tc">0</span> 条</h3>
+    <div style="overflow-x:auto"><table><thead><tr><th>类型</th><th>地点</th><th>描述</th><th>时间</th></tr></thead><tbody id="hm-tb"></tbody></table></div>
+    <div class="pg" id="pgn"></div>
+  </div>
+</div>
+<div class="ft">Hamster <a href="mailto:zviman777@gmail.com" style="color:#555">zviman777@gmail.com</a> &middot; 数据由用户匿名提交</div>
+
+<script>
+var Q=s=>document.querySelector(s),ch=null,pg=1,pt=1,GEO=null;
+var CL={};[
+'东城区',116.418,39.928,'西城区',116.366,39.912,'朝阳区',116.601,39.945,'海淀区',116.297,39.959,'丰台区',116.287,39.858,'石景山区',116.221,39.906,
+'和平区',117.215,39.118,'河东区',117.225,39.122,'河西区',117.218,39.098,'南开区',117.151,39.13,'河北区',117.196,39.148,'滨海新区',117.654,39.034,
+'石家庄市',114.514,38.042,'唐山市',118.18,39.63,'保定市',115.484,38.873,'邯郸市',114.539,36.625,'廊坊市',116.683,39.537,'秦皇岛市',119.586,39.942,
+'太原市',112.548,37.87,'大同市',113.295,40.09,'运城市',111.003,35.022,'临汾市',111.518,36.083,'晋中市',112.752,37.687,'长治市',113.116,36.195,
+'呼和浩特市',111.749,40.841,'包头市',109.84,40.657,'鄂尔多斯市',109.781,39.608,'赤峰市',118.888,42.257,'通辽市',122.244,43.617,
+'沈阳市',123.429,41.796,'大连市',121.618,38.914,'鞍山市',122.994,41.108,'抚顺市',123.957,41.88,'锦州市',121.126,41.095,'丹东市',124.354,40,
+'长春市',125.324,43.886,'吉林市',126.549,43.837,'四平市',124.35,43.166,'通化市',125.939,41.728,'延边州',129.508,42.891,
+'哈尔滨市',126.535,45.802,'齐齐哈尔市',123.918,47.354,'大庆市',125.103,46.589,'牡丹江市',129.608,44.582,'佳木斯市',130.318,46.799,
+'黄浦区',121.484,31.231,'徐汇区',121.435,31.179,'长宁区',121.42,31.22,'静安区',121.448,31.227,'浦东新区',121.544,31.221,'闵行区',121.381,31.112,
+'南京市',118.796,32.059,'苏州市',120.585,31.298,'无锡市',120.301,31.574,'常州市',119.974,31.811,'南通市',120.894,31.979,'徐州市',117.184,34.261,
+'杭州市',120.155,30.274,'宁波市',121.622,29.868,'温州市',120.672,28,'嘉兴市',120.75,30.762,'绍兴市',120.581,29.997,'金华市',119.652,29.078,
+'合肥市',117.227,31.82,'芜湖市',118.432,31.352,'蚌埠市',117.389,32.915,'淮南市',117.018,32.626,'阜阳市',115.814,32.89,'安庆市',117.063,30.543,
+'福州市',119.296,26.074,'厦门市',118.089,24.479,'泉州市',118.675,24.874,'漳州市',117.647,24.513,'莆田市',119.007,25.431,
+'南昌市',115.858,28.683,'赣州市',114.933,25.831,'九江市',115.992,29.712,'宜春市',114.416,27.814,'上饶市',117.943,28.454,
+'济南市',117,36.651,'青岛市',120.382,36.067,'烟台市',121.448,37.463,'潍坊市',119.161,36.706,'临沂市',118.356,35.104,'淄博市',118.054,36.813,
+'郑州市',113.625,34.746,'洛阳市',112.454,34.619,'开封市',114.341,34.797,'新乡市',113.926,35.303,'南阳市',112.528,32.99,'信阳市',114.091,32.147,
+'武汉市',114.305,30.593,'宜昌市',111.286,30.691,'襄阳市',112.122,32.009,'荆州市',112.241,30.335,'黄冈市',114.872,30.453,'十堰市',110.798,32.629,
+'长沙市',112.938,28.228,'株洲市',113.131,27.835,'湘潭市',112.944,27.829,'衡阳市',112.572,26.893,'岳阳市',113.128,29.357,'常德市',111.699,29.031,
+'广州市',113.264,23.129,'深圳市',114.057,22.543,'东莞市',113.751,23.02,'佛山市',113.121,23.021,'珠海市',113.576,22.271,'中山市',113.382,22.515,
+'南宁市',108.366,22.817,'桂林市',110.29,25.273,'柳州市',109.428,24.326,'梧州市',111.279,23.476,'北海市',109.119,21.473,
+'海口市',110.331,20.031,'三亚市',109.508,18.247,'儋州市',109.576,19.521,'琼海市',110.466,19.246,
+'渝中区',106.562,29.556,'江北区',106.577,29.609,'南岸区',106.643,29.518,'沙坪坝区',106.456,29.541,'九龙坡区',106.506,29.502,'渝北区',106.63,29.718,
+'成都市',104.066,30.572,'绵阳市',104.679,31.467,'德阳市',104.397,31.127,'南充市',106.11,30.837,'宜宾市',104.63,28.751,'泸州市',105.443,28.871,
+'贵阳市',106.63,26.647,'遵义市',106.927,27.725,'六盘水市',104.832,26.591,'黔南州',107.517,26.258,
+'昆明市',102.832,24.88,'曲靖市',103.796,25.49,'玉溪市',102.546,24.351,'大理州',100.225,25.591,'红河州',103.375,23.364,
+'拉萨市',91.14,29.65,'日喀则市',88.881,29.267,'昌都市',97.178,31.146,
+'西安市',108.939,34.341,'咸阳市',108.708,34.329,'宝鸡市',107.237,34.361,'渭南市',109.51,34.499,'汉中市',107.023,33.066,'榆林市',109.733,38.285,
+'兰州市',103.834,36.061,'天水市',105.724,34.58,'酒泉市',98.494,39.732,'嘉峪关市',98.277,39.773,
+'西宁市',101.778,36.617,'海东市',102.104,36.479,
+'银川市',106.23,38.486,'石嘴山市',106.383,38.984,'吴忠市',106.198,37.986,
+'乌鲁木齐市',87.617,43.825,'克拉玛依市',84.889,45.596,'吐鲁番市',89.184,42.947,'喀什地区',75.989,39.467
+].forEach(function(v,i,a){if(i%3===0)CL[a[i]]=[a[i+1],a[i+2]]});
+
+function init(){
+  if(localStorage.theme === 'light' || (!localStorage.theme && window.matchMedia('(prefers-color-scheme:light)').matches)){document.body.classList.add('light');Q('#ti').innerHTML='&#9728;'}
+  Q('#tb').addEventListener('click',function(){document.body.classList.toggle('light');var l=document.body.classList.contains('light');localStorage.theme=l?'light':'dark';Q('#ti').innerHTML=l?'&#9728;':'&#9790;';document.querySelector('meta[name=theme-color]').content=l?'#f8f8f8':'#0a0a0a';if(ch){mr()}});
+  if('serviceWorker' in navigator)navigator.serviceWorker.register('/sw.js');
+  loadAll();
+}
+
+async function loadAll(){await Promise.all([ls(),lp(),initMap(),lr(),ll(1)])}
+async function ls(){var r=await fetch('/api/public/stats');var d=await r.json();Q('#sg').innerHTML='<div class="sc red"><div class="sn">'+d.totalReports+'</div><div class="sl">总举报数</div></div><div class="sc white"><div class="sn">'+d.totalUsers+'</div><div class="sl">举报人数</div></div><div class="sc white"><div class="sn">'+d.totalLocations+'</div><div class="sl">涉及地点</div></div><div class="sc"><div class="sn">'+d.reportEdu+'</div><div class="sl">教育</div><span style="font-size:11px;color:#555">'+d.reportMun+' 政务</span></div>'}
+async function lp(){var r=await fetch('/api/public/provinces');var d=await r.json();var s=Q('#fp');d.forEach(function(p){var o=document.createElement('option');o.value=o.textContent=p.province;s.appendChild(o)})}
+
+async function initMap(){
+  if(!window.echarts){await new Promise(function(res,rej){var s=document.createElement('script');s.src='/lib/echarts.min.js';s.onload=res;s.onerror=rej;document.head.appendChild(s)})}
+  if(!GEO){var r=await fetch('/china-geo.json');GEO=await r.json();echarts.registerMap('china',GEO)}
+  if(ch)ch.dispose();
+  ch=echarts.init(document.getElementById('map'));
+  mr();
+  window.addEventListener('resize',function(){if(ch)ch.resize()});
+}
+
+async function mr(){
+  var r=await fetch('/api/public/points');var pts=await r.json();
+  var data=pts.filter(function(p){return CL[p.city]}).map(function(p){var c=CL[p.city];return{name:p.city,value:[c[0],c[1],p.count],province:p.province,rtype:p.report_type}});
+  if (!ch) return; var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+  ch.setOption({tooltip:{trigger:'item',confine:true,backgroundColor:'rgba(28,28,30,.92)',borderColor:'#444',textStyle:{color:'#fff',fontSize:12},formatter:function(p){if(!p.value||!p.data)return p.name||'';var d=p.data;return'<b>'+p.name+'</b><br>省份：'+(d.province||'')+'<br>举报次数：<b style="color:#fb6a4a">'+(p.value[2]||0)+'</b><br>类型：'+(d.rtype==='education'?'教育':'政务')}},
+    visualMap:{show:true,min:0,max:Math.max(1,data.reduce(function(m,p){return Math.max(m,p.value[2])},0)),left:10,top:'bottom',text:['多','少'],calculable:true,orient:'vertical',inRange:{color:['#fee5d9','#fcae91','#fb6a4a','#cb181d','#67000d']},textStyle:{color:isDark?'#999':'#666',fontSize:11}},
+    geo:{map:'china',roam:true,zoom:1.2,scaleLimit:{min:0.8,max:4},label:{show:false},itemStyle:{areaColor:isDark?'#4a5568':'#e8e8ed',borderColor:isDark?'#a0aec0':'#999',borderWidth:1},emphasis:{label:{show:true,color:'#333'},areaColor:'#ffd591'}},
+    series:[{type:'scatter',coordinateSystem:'geo',geoIndex:0,data:data.map(function(d){return{name:d.name,value:[d.value[0],d.value[1],d.value[2]],province:d.province,rtype:d.rtype}}),symbolSize:14,itemStyle:{color:'#e74c3c'}}]});
+}
+
+async function lr(){var r=await fetch('/api/public/rank?limit=10');var d=await r.json();Q('#rk').innerHTML=d.length?d.map(function(it,i){return'<div class="ri"><span class="rn">'+(i+1)+'</span><span class="rt">'+it.province+' &middot; '+it.city+' &middot; '+it.district+'</span><span class="rc">'+it.count+' 次</span></div>'}).join(''):'<div style="color:#555;text-align:center;padding:12px">暂无数据</div>'}
+async function ll(p){pg=p;var q=new URLSearchParams({page:p,limit:20});var t=Q('#ft').value,v=Q('#fp').value,s=Q('#fs').value,e=Q('#fe').value;if(t)q.set('type',t);if(v)q.set('province',v);if(s)q.set('start_date',s);if(e)q.set('end_date',e);var r=await fetch('/api/public/list?'+q);var d=await r.json();pt=d.totalPages;Q('#tc').textContent=d.total;Q('#hm-tb').innerHTML=d.data.length?d.data.map(function(it){return'<tr><td>'+(it.report_type==='education'?'<span class="tag tag-e">教育</span>':'<span class="tag tag-g">政务</span>')+'</td><td class="td-l">'+es(it.province)+'<br><span style="font-size:10px;color:#555">'+es(it.city)+' &middot; '+es(it.district)+'</span></td><td class="td-v">'+es(it.description)+'</td><td class="td-t">'+fd(it.created_at)+'</td></tr>'}).join(''):'<tr><td colspan="4" style="text-align:center;padding:24px;color:#555">暂无数据</td></tr>';var i=[];i.push('<button class="pg-btn" onclick="ll('+(pg-1)+')" '+(pg<=1?'disabled':'')+'>&#8249;</button>');var st=Math.max(1,pg-2),ed=Math.min(pt,st+4);for(var x=st;x<=ed;x++)i.push('<button class="pg-btn'+(x===pg?' on':'')+'" onclick="ll('+x+')">'+x+'</button>');i.push('<button class="pg-btn" onclick="ll('+(pg+1)+')" '+(pg>=pt?'disabled':'')+'>&#8250;</button>');Q('#pgn').innerHTML=i.join('')}
+function af(){ll(1);mr()}function rf(){['ft','fp','fs','fe'].forEach(function(id){Q('#'+id).value=''});ll(1);mr()}
+function es(s){return String(s||'').replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+function fd(s){return s?s.replace('T',' ').slice(0,16):''}
+init();
+</script></body></html>
